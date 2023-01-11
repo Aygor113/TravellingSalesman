@@ -36,6 +36,7 @@ if __name__ == '__main__':
     driversList = []
     firstDriverCityOrder = []
     secondDriverCityOrder = []
+    bestSolutionDriversList = []
     # add to all drivers first city in pos 0 and int the last pos - they need to start from base and end in base
     baseCity = City("Base", 0, 0)
 
@@ -116,6 +117,8 @@ if __name__ == '__main__':
             randomNumber = random.random()
             if newSolution < bestFoundSolution:
                 bestFoundSolution = newSolution
+                for w in numberOfDrivers:
+                    bestSolutionDriversList.append(driversList[w])
             if randomNumber < result or newSolution < currentSolution:
                 currentSolution = newSolution
                 newSolution = 0
@@ -149,4 +152,6 @@ def calculateDistance(city1X, city1Y, city2X, city2Y):
     else:
         return 0
 
-# todo dla wiekszej liczby miast potestowac temperatury.
+# todo test temperatures for larger amount of cities
+# todo for creating graphs use <driversList>
+# todo and plot a path for each driver in driversList
