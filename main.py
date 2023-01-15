@@ -13,7 +13,7 @@ from Driver.Driver import *
 if __name__ == '__main__':
     # input variables
     numberOfDrivers = 2 # notUsed
-    temperature = 50
+    temperature = 40
     finalTemperature = 20
     temperatureDivider = 0.8
     numberOfTries = 5
@@ -117,7 +117,7 @@ if __name__ == '__main__':
             randomNumber = random.random()
             if newSolution < bestFoundSolution:
                 bestFoundSolution = newSolution
-                for w in numberOfDrivers:
+                for w in range(numberOfDrivers):
                     bestSolutionDriversList.append(driversList[w])
             if randomNumber < result or newSolution < currentSolution:
                 currentSolution = newSolution
