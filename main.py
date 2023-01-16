@@ -2,6 +2,7 @@ import random
 
 from Map.CountryMap import *
 from Driver.Driver import *
+import matplotlib.pyplot as plt
 
 # This is a sample Python script.
 
@@ -129,6 +130,66 @@ if __name__ == '__main__':
     print("Final solution: " + str(currentSolution))
     print("Best solution: " + str(bestFoundSolution))
 
+    def createDataToPlot():
+
+        global listOfListsX
+        global listOfListsY
+
+        pointx = []
+        pointy = []
+        for x in range((len(driversList))):
+            for y in range(len(driversList[x].listOfCities)):
+
+                pointx.append(driversList[x].listOfCities[y].xPos)
+                pointy.append(driversList[x].listOfCities[y].yPos)
+
+        listTempX = []
+        listTempY = []
+        listOfListsX= []
+        listOfListsY = []
+
+        for i in range(len(pointx)):
+
+            if pointx[i] == 0 and pointx[i-1]:
+                listTempX.append(pointx[i])
+                listOfListsX.append(listTempX)
+                listTempX = []
+                listTempY.append(pointy[i])
+                listOfListsY.append(listTempY)
+                listTempY = []
+            else:
+                listTempX.append(pointx[i])
+                listTempY.append(pointy[i])
+
+        print("x",pointx)
+        print("y",pointy)
+        print(listOfListsX)
+        print(listOfListsY)
+
+
+        return listOfListsX,listOfListsY
+
+    createDataToPlot()
+
+
+
+    def drawResult(listOfListX,listOfListsY):
+
+        color = ['red', 'blue', 'black', 'green', 'yellow']
+        actual_color = []
+        pointx = listOfListX
+        pointy = listOfListsY
+
+        for i in range(len(pointx)):
+            for j in range(len(pointx[i])):
+                plt.scatter(pointx[i][j], pointy[i][j], s=10, color=color[i])
+
+        for y in range(len(pointx)):
+            actual_color.append(color[y])
+            plt.plot(pointx[y], pointy[y], color=actual_color[y])
+        plt.show()
+
+    drawResult(listOfListsX,listOfListsY)
 
 def createDistanceArray(self, countryMap):
     numberOfCities = len(countryMap.listOfCities)
@@ -151,6 +212,7 @@ def calculateDistance(city1X, city1Y, city2X, city2Y):
         return dist
     else:
         return 0
+
 
 # todo test temperatures for larger amount of cities
 # todo for creating graphs use <driversList>
