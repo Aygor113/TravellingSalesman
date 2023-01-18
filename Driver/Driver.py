@@ -19,10 +19,6 @@ class Driver:
             cityDestination = self.listOfCities[x+1]
             twoPointDist = calculateDistance(cityOrigin.xPos, cityOrigin.yPos, cityDestination.xPos, cityDestination.yPos)
             distance += twoPointDist
-            #print("Dist:" + str(twoPointDist) + " ; Point A: " + str(cityOrigin.xPos) + "," + str(cityOrigin.yPos) +
-            #      " ; Point b: " + str(cityDestination.xPos) + "," + str(cityDestination.yPos))
-            #print("Current sum of distances: " + str(distance))
-
         return distance
 
     def listDriverCities(self):
@@ -38,8 +34,10 @@ class Driver:
             swapIndex1 = random.randint(1, listLength-3)        # first and last city must be Base City
         elif listLength == 4:
             swapIndex1 = 1  # first and last city must be Base City
+        else:
+            return
         swapIndex2 = swapIndex1+1
-        self.listOfCities[swapIndex1], self.listOfCities[swapIndex2] = self.listOfCities[swapIndex1], self.listOfCities[swapIndex2]
+        self.listOfCities[swapIndex1], self.listOfCities[swapIndex2] = self.listOfCities[swapIndex2], self.listOfCities[swapIndex1]
 
 
     def changeOrderOfTwoRandomCities(self):
@@ -50,9 +48,16 @@ class Driver:
         if listLength > 3:
             while swapIndex1 == swapIndex2:
                 swapIndex2 = random.randint(1, listLength-2)
-        self.listOfCities[swapIndex1], self.listOfCities[swapIndex2] = self.listOfCities[swapIndex1], self.listOfCities[swapIndex2]
+        self.listOfCities[swapIndex1], self.listOfCities[swapIndex2] = self.listOfCities[swapIndex2], self.listOfCities[swapIndex1]
 
+    def changeIndex(self):
+        listLength = len(self.listOfCities)
+        if listLength <= 4:
+            return
+        index1 = random.randint(1, len(self.listOfCities)-2)
+        index2 = random.randint(1, len(self.listOfCities)-3)
 
-    def exchangeCity(self, city):
-        index = random.randint(1, len(self.listOfCities))
-        self.listOfCities[index]
+        # if listLength > 3:
+        #     while index1 == index2:
+        #         index2 = random.randint(1, listLength-2)
+        self.listOfCities.insert(index2, self.listOfCities.pop(index1))

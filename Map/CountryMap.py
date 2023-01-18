@@ -15,7 +15,8 @@ class CountryMap:
 
     def createMap(self):
         #with open('Data/makuch6.txt') as f:
-        with open('Data/makuch15.txt') as f:
+        with open('Data/makuch51.txt') as f:
+        #with open('Data/jacek_example.txt') as f:
         #with open('Data/makuch51.txt') as f:
             lines = f.readlines()
         # numberOfCities is a value hardcoded in a text file
@@ -24,25 +25,9 @@ class CountryMap:
         for x in range(numberOfCities):
             pos = lines[int(x)+1].split()
             cityName = "city_" + str(int(x) + 1)
-            city = City(cityName, int(pos[0]), int(pos[1]))
+            city = City(cityName, int(pos[0])-40.5, int(pos[1])-40.5)       #todo
             CountryMap.listOfCities.append(city)
             CountryMap.listOfCities[int(x)].listCity()
-
-    def createDistanceArray(self):
-        numberOfCities = len(CountryMap.listOfCities)
-        distArray = np.empty(shape=(numberOfCities, numberOfCities))
-        for i in range(numberOfCities):
-            for j in range(numberOfCities):
-                #print("City 1 xPos: " + str(CountryMap.listOfCities[i].xPos))
-                dist = CountryMap.calculateDistance(self, CountryMap.listOfCities[i].xPos,
-                                                    CountryMap.listOfCities[i].yPos,
-                                                    CountryMap.listOfCities[j].xPos, CountryMap.listOfCities[
-                                                        j].yPos)  # todo work on city object instead of coordinates
-                distArray[i][j] = dist
-                #print("DISTANCE: " + str(dist))
-
-
-
 
     def calculateDistance(self, city1X, city1Y, city2X, city2Y):
         #print("City 1 xPos in funct: " + str(city1X))
