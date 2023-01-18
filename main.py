@@ -2,6 +2,7 @@ import random
 
 from Map.CountryMap import *
 from Driver.Driver import *
+import matplotlib.pyplot as plt
 
 # This is a sample Python script.
 
@@ -13,11 +14,11 @@ from Driver.Driver import *
 if __name__ == '__main__':
     # input variables
     numberOfDrivers = 2 # notUsed
-    temperature = 40
+    temperature = 100
     finalTemperature = 20
     temperatureDivider = 0.8
     numberOfTries = 5
-    maxNumberOfTries = 40
+    maxNumberOfTries = 10000000
     currentNumberOfTries = 0
     firstSolution = 99999999999
 
@@ -109,6 +110,7 @@ if __name__ == '__main__':
                         insert(randomCityIndexAdd, driversList[randomDriverIndex].listOfCities[randomCityIndexRemove])
                     # removing city from a list
                     driversList[randomDriverIndex].listOfCities.pop(randomCityIndexRemove)
+            print("Temperature: " + str(temperature))
             newSolution = 0
             for z in range(len(driversList)):
                 newSolution = newSolution + driversList[z].calculateRouteDistance()
@@ -124,11 +126,78 @@ if __name__ == '__main__':
                 newSolution = 0
 
             print("Current solution after choice to be or not be accepted: " + str(currentSolution))
+        temperature = temperature * temperatureDivider;
 
     print("First solution: " + str(firstSolution))
     print("Final solution: " + str(currentSolution))
     print("Best solution: " + str(bestFoundSolution))
 
+    def createDataToPlot():
+
+        global listOfListsX
+        global listOfListsY
+
+        pointx = []
+        pointy = []
+        for x in range((len(driversList))):
+            for y in range(len(driversList[x].listOfCities)):
+
+                pointx.append(driversList[x].listOfCities[y].xPos)
+                pointy.append(driversList[x].listOfCities[y].yPos)
+
+        listTempX = []
+        listTempY = []
+        listOfListsX= []
+        listOfListsY = []
+
+
+        for i in range(len(pointx)):
+
+            if pointx[i] == 0 and pointx[i-1]:
+                listTempX.append(pointx[i])
+                listOfListsX.append(listTempX)
+                listTempX = []
+                listTempY.append(pointy[i])
+                listOfListsY.append(listTempY)
+                listTempY = []
+            else:
+                listTempX.append(pointx[i])
+                listTempY.append(pointy[i])
+
+        #print("x",pointx)
+        #print("y",pointy)
+        #print(listOfListsX)
+        #print(listOfListsY)
+
+
+        return listOfListsX,listOfListsY
+
+    # printing final order of cities.
+    for x in range(numberOfDrivers):
+        driversList[x].listDriverCities()
+
+
+    createDataToPlot()
+
+
+
+    def drawResult(listOfListX,listOfListsY):
+
+        color = ['red', 'blue', 'black', 'green', 'yellow']
+        actual_color = []
+        pointx = listOfListX
+        pointy = listOfListsY
+
+        for i in range(len(pointx)):
+            for j in range(len(pointx[i])):
+                plt.scatter(pointx[i][j], pointy[i][j], s=10, color=color[i])
+
+        for y in range(len(pointx)):
+            actual_color.append(color[y])
+            plt.plot(pointx[y], pointy[y], color=actual_color[y])
+        plt.show()
+
+    drawResult(listOfListsX,listOfListsY)
 
 def createDistanceArray(self, countryMap):
     numberOfCities = len(countryMap.listOfCities)

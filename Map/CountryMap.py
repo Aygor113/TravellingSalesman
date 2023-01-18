@@ -14,7 +14,9 @@ class CountryMap:
         self.temperature = temperature
 
     def createMap(self):
-        with open('Data/makuch.txt.txt') as f:
+        #with open('Data/makuch6.txt') as f:
+        with open('Data/makuch15.txt') as f:
+        #with open('Data/makuch51.txt') as f:
             lines = f.readlines()
         # numberOfCities is a value hardcoded in a text file
         numberOfCities = int(lines[0])
