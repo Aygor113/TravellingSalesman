@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # input variables
-    numberOfDrivers = 8 # notUsed
+    numberOfDrivers = 2 # notUsed
     temperature = 20
     finalTemperature = 0.1
     temperatureDivider = 0.95
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     #firstDriverCityOrder = []
     #secondDriverCityOrder = []
     bestSolutionDriversList = []
+    allSolutionList = []            # list of all accepted solutions
     # add to all drivers first city in pos 0 and int the last pos - they need to start from base and end in base
 
     citiesShift = 0
@@ -78,44 +79,30 @@ if __name__ == '__main__':
         driversList.append(driver)
 
 
+    # printing first order of cities.
+    for x in range(numberOfDrivers):
+        driversList[x].listDriverCities()
 
 
-
-    """
-    # driver2
-    secondDriverCityOrder.append(baseCity)
-    for y in range (numberOfCitiesSecondDriver):
-        secondDriverCityOrder.append(countryMap.listOfCities[len(countryMap.listOfCities) - numberOfCitiesSecondDriver + y])
-    secondDriverCityOrder.append(baseCity)
-
-    # Creation of the drivers - salesmen
-    driver1 = Driver("driver1", firstDriverCityOrder)
-    driver2 = Driver("driver2", secondDriverCityOrder)
-
-    driversList.append(driver1)
-    driversList.append(driver2)
-
-    driver1.listDriverCities()
-    driver2.listDriverCities()
-    """
     # solution is a sum of distances covered by all drivers
     newSolution = 0
     currentSolution = 0
     bestFoundSolution = 99999999
     for z in range(len(driversList)):
         currentSolution = currentSolution + driversList[z].calculateRouteDistance()
+    allSolutionList.append(currentSolution)
     firstSolution = currentSolution
     while temperature >= finalTemperature and currentNumberOfTries <= maxNumberOfTries:
         for x in range(numberOfTries):
             currentNumberOfTries = currentNumberOfTries+1
-            print("Current number of tries: " + str(currentNumberOfTries))
+            #print("Current number of tries: " + str(currentNumberOfTries))
             newSolutionChoice = random.randint(1, 4)
-            print("NUMB: " + str(newSolutionChoice))
+            #print("NUMB: " + str(newSolutionChoice))
             # copying list of drivers
             driversListCopy = copy.deepcopy(driversList)
             # Swapping order of two consecutive cities for one random driver
             if newSolutionChoice == 1:
-                print("Creating new solution - option 1 was chosen.")
+                #print("Creating new solution - option 1 was chosen.")
                 randomDriverIndex = random.randint(0, numberOfDrivers-1)
                 driversListCopy[randomDriverIndex].changeOrderOfTwoConsecutiveCities()
             # swapping order of two, not necessary consecutive cities for one random driver
@@ -143,11 +130,11 @@ if __name__ == '__main__':
                         insert(randomCityIndexAdd, driversListCopy[randomDriverIndex].listOfCities[randomCityIndexRemove])
                     # removing city from a list
                     driversListCopy[randomDriverIndex].listOfCities.pop(randomCityIndexRemove)
-            print("Temperature: " + str(temperature))
+            #print("Temperature: " + str(temperature))
             newSolution = 0
             for z in range(len(driversListCopy)):
                 newSolution = newSolution + driversListCopy[z].calculateRouteDistance()
-            print("Before deciding: " + str(newSolution))
+            #print("Before deciding: " + str(newSolution))
             result = math.exp((currentSolution - newSolution) / temperature)
             randomNumber = random.random()
             if newSolution < bestFoundSolution:
@@ -155,13 +142,13 @@ if __name__ == '__main__':
                 for w in range(numberOfDrivers):
                     bestSolutionDriversList.append(driversListCopy[w])
             if randomNumber < result or newSolution < currentSolution:
-            #if newSolution < currentSolution:
                 currentSolution = newSolution
                 newSolution = 0
                 driversList = driversListCopy
-                print("ACCEPTED")
+                #print("ACCEPTED")
 
-            print("After try " + str(currentSolution))
+            allSolutionList.append(currentSolution)
+            #print("After try " + str(currentSolution))
         temperature = temperature * temperatureDivider
 
     print("First solution: " + str(firstSolution))
@@ -181,29 +168,39 @@ if __name__ == '__main__':
                 pointx.append(driversList[x].listOfCities[y].xPos)
                 pointy.append(driversList[x].listOfCities[y].yPos)
 
-        listTempX = []
-        listTempY = []
+        listTempX = [pointx[0]]
+        listTempY = [pointy[0]]
         listOfListsX= []
         listOfListsY = []
 
+        print("x", pointx)
+        print("y", pointy)
 
-        for i in range(len(pointx)):
+        for i in range(1,len(pointx)):
 
-            if pointx[i] == 0 and pointx[i-1]:
-                listTempX.append(pointx[i])
+            if pointx[i] == pointx[i-1] and pointy[i] == pointy[i-1]:
+
+
                 listOfListsX.append(listTempX)
                 listTempX = []
-                listTempY.append(pointy[i])
+                listTempX.append(pointx[i])
+
+
                 listOfListsY.append(listTempY)
                 listTempY = []
+                listTempY.append(pointy[i])
+
             else:
+
+
                 listTempX.append(pointx[i])
                 listTempY.append(pointy[i])
 
-        #print("x",pointx)
-        #print("y",pointy)
-        #print(listOfListsX)
-        #print(listOfListsY)
+        listOfListsX.append(listTempX)
+        listOfListsY.append(listTempY)
+
+        print(listOfListsX)
+        print(listOfListsY)
 
 
         return listOfListsX,listOfListsY
@@ -233,7 +230,18 @@ if __name__ == '__main__':
             plt.plot(pointx[y], pointy[y], color=actual_color[y])
         plt.show()
 
+    def drawResults2(allSolutionList):
+        print("t1" + str(allSolutionList[0]))
+        vList = []
+
+        for g in range(len(allSolutionList)):
+            vList.append(g)
+        plt.plot(vList, allSolutionList)
+        plt.show()
+
+    drawResults2(allSolutionList)
     drawResult(listOfListsX,listOfListsY)
+
 
 def createDistanceArray(self, countryMap):
     numberOfCities = len(countryMap.listOfCities)

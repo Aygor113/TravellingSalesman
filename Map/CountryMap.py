@@ -14,10 +14,10 @@ class CountryMap:
         self.temperature = temperature
 
     def createMap(self):
-        #with open('Data/makuch6.txt') as f:
-        with open('Data/makuch51.txt') as f:
-        #with open('Data/jacek_example.txt') as f:
-        #with open('Data/makuch51.txt') as f:
+        with open('Data/data6.txt') as f:
+        #with open('Data/data15.txt') as f:
+        #with open('Data/example8.txt') as f:
+        #with open('Data/data51.txt') as f:
             lines = f.readlines()
         # numberOfCities is a value hardcoded in a text file
         numberOfCities = int(lines[0])
@@ -25,7 +25,7 @@ class CountryMap:
         for x in range(numberOfCities):
             pos = lines[int(x)+1].split()
             cityName = "city_" + str(int(x) + 1)
-            city = City(cityName, int(pos[0])-40.5, int(pos[1])-40.5)       #todo
+            city = City(cityName, int(pos[0]), int(pos[1]))       #todo
             CountryMap.listOfCities.append(city)
             CountryMap.listOfCities[int(x)].listCity()
 
